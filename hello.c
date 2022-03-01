@@ -13,7 +13,6 @@ int func(int a){
 
 int main(){
     int i, n;
-    char probel[20]; 
     printf("сколько хотите написать чисел:\n");
     scanf("%d", &n);
     int mas[n];
