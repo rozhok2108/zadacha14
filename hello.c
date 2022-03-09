@@ -1,39 +1,60 @@
 #include <stdio.h>
-#include <math.h>
-
-int func(int a){
-    int k=0, b=0, rez=0;
-    for(k=0;a>0;k++){
-        b=a%10;
-        if(b!=0 && b!=1){
-            rez='\0';
-            break;
+#include <stdlib.h>
+int main()
+{
+    FILE *matr, *graf;
+    char m[100];
+    char s = ' ';
+    int i = 0, a = 0;
+    int k,j, rez1, kol;
+    char rez2;
+     matr = fopen("matr.txt", "r");
+    while(!feof(matr)){
+        if (a == 0 && s == '\n'){
+            a = i;
         }
-        rez+= b*pow(2,k);
-        a/=10;
+        if (s == '1' || s == '0'){
+            m[i] = s;
+            i++;
+        }
+        fscanf(matr, "%c", &s);
     }
-    return rez;
-}
-
-int main(){
-    int i=0, n=0;
-    printf("сколько хотите написать чисел:\n");
-    scanf("%d", &n);
-    int mas[n];
-   printf("введите числа в двоичной системе:\n");
-   for (i=0; i<n; i++){
-       scanf("%d", &mas[i]);
-   }
-    printf("ДВОИЧНАЯ\tДЕСЯТИЧНАЯ\n");
-    for(i=0; i<n; i++){
-        printf("%8d\t", mas[i]);
-        if(func(mas[i]) =='\0'){
-            printf("ошибка\n");
-        }
-        else{
-            printf("%8d\n", func(mas[i]));
+    for ( j = 1; j <= a; j++){
+        kol = 0;
+        for ( k = j; k <= i; k++){
+            if(m[k-1] == '1'){
+                if (kol > 0){
+                    printf("%d\n", k/(a+1)+1);
+                    break;
+                }
+                if (kol == 0){
+                    kol++;
+                    printf("%d: ", k/(a+1)+1);
+                }
+            }
+            k += a-1;//спускаемся вниз, под это элемент 
         }
     }
-    return 0;
-}
+    graf = fopen("graf.gv", "w");
+    fprintf(graf, "digraph Grah {\n");
+    for (j = 1; j <= a; j++){
+        kol = 0;
+        for (k = j; k <= i; k++){
+            if(m[k-1] == '1'){
+                if (kol > 0){
+                    fprintf(graf, "\"%d\"\n",  k/(a+1)+1);
+                    break;
+                }
+                if (kol == 0){
+                    kol++;
+                    fprintf(graf, "\"%d\"-> ",  k/(a+1)+1);
+                }
+            }
+            k += a-1;
+        }
+    }
+    fprintf(graf, "}");
+    fclose(graf);
 
+    return 0; 
+}   
